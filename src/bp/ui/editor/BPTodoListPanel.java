@@ -96,7 +96,6 @@ public class BPTodoListPanel extends JPanel implements BPEditor<JPanel>, BPViewe
 		}
 		m_scroll = new JScrollPane();
 		m_toolbar = new BPToolBarSQ(true);
-		m_toolbar.setBarHeight(22);
 
 		Action actadd = BPAction.build("add").tooltip("Create Item").callback(this::onAdd).vIcon(BPIconResV.ADD()).getAction();
 		Action actdel = BPAction.build("del").tooltip("Remove Item(s)").callback(this::onDel).vIcon(BPIconResV.DEL()).getAction();

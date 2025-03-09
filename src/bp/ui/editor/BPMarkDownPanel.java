@@ -86,6 +86,7 @@ public class BPMarkDownPanel extends BPTextPanel
 		initActions();
 		add(sp, BorderLayout.CENTER);
 
+		initListeners();
 		m_txt.setOnPosChanged(this::onPosChanged);
 		m_txt.resizeDoc();
 		m_txt.setChangedHandler(m_changedhandler);
