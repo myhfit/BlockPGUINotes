@@ -13,12 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import bp.BPCore;
 import bp.config.BPConfig;
-import bp.config.UIConfigs;
 import bp.data.BPDataContainer;
 import bp.data.BPDataContainerBase;
 import bp.data.BPDiagram;
@@ -100,10 +98,10 @@ public class BPTodoListPanel extends JPanel implements BPEditor<JPanel>, BPViewe
 		Action actadd = BPAction.build("add").tooltip("Create Item").callback(this::onAdd).vIcon(BPIconResV.ADD()).getAction();
 		Action actdel = BPAction.build("del").tooltip("Remove Item(s)").callback(this::onDel).vIcon(BPIconResV.DEL()).getAction();
 		Action actedit = BPAction.build("edit").tooltip("Edit Item").callback(this::onEdit).vIcon(BPIconResV.EDIT()).getAction();
+		m_toolbar.setBorderVertical(0);
 		m_toolbar.setActions(new Action[] { BPAction.separator(), actadd, actdel, BPAction.separator(), actedit });
 
 		m_scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
-		m_toolbar.setBorder(new MatteBorder(0, 0, 0, 1, UIConfigs.COLOR_WEAKBORDER()));
 
 		m_scroll.setViewportView(m_table);
 
