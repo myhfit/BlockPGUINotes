@@ -3,14 +3,20 @@ package bp.ui.editor;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.AdjustmentEvent;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
+import javax.swing.Action;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
@@ -22,16 +28,18 @@ import bp.format.BPFormat;
 import bp.format.BPFormatMarkdown;
 import bp.res.BPResource;
 import bp.res.BPResourceFile;
-import bp.res.BPResourceFileSystem;
 import bp.res.BPResourceFileLocal;
+import bp.res.BPResourceFileSystem;
+import bp.ui.actions.BPAction;
+import bp.ui.scomp.BPEditorPane;
 import bp.ui.scomp.BPMarkDownCodePane;
 import bp.ui.scomp.BPMarkDownView;
-import bp.ui.scomp.BPEditorPane;
 import bp.ui.scomp.BPTextPane;
 import bp.ui.util.CommonUIOperations;
 import bp.ui.util.UIUtil;
 import bp.util.IOUtil;
 import bp.util.MarkdownUtil;
+import bp.util.ObjUtil;
 import bp.util.Std;
 import bp.util.TextUtil;
 
@@ -92,6 +100,16 @@ public class BPMarkDownPanel extends BPTextPanel
 		m_txt.setChangedHandler(m_changedhandler);
 	}
 
+	protected void initActions()
+	{
+		super.initActions();
+		List<Action> rc = ObjUtil.makeList((Object[]) m_acts);
+		BPAction actbold = BPAction.build("Bold").acceleratorKey(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK)).callback(this::setTextBold).getAction();
+
+		rc.add(rc.size() - 1, actbold);
+		m_acts = rc.toArray(new Action[rc.size()]);
+	}
+
 	protected void onTextChanged(BPEditorPane comp)
 	{
 		m_changed.set(true);
@@ -134,13 +152,19 @@ public class BPMarkDownPanel extends BPTextPanel
 		if (canpreview)
 		{
 			m_sp.add(m_pdest);
-			// onTextChanged(m_txt);
 		}
 		else
 		{
 			m_sp.remove(m_pdest);
 		}
 		m_sp.validate();
+	}
+
+	protected void setTextBold(ActionEvent e)
+	{
+		BPTextPane txt = m_txt;
+		String sel = txt.getSelectedText();
+		txt.replaceSelection("**" + sel + "**");
 	}
 
 	public final static class BPEditorFactoryMarkDown implements BPEditorFactory

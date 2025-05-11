@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
 import java.lang.ref.WeakReference;
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import bp.BPCore;
+import bp.BPGUICore;
 import bp.cache.BPCacheDataFileSystem;
 import bp.cache.BPCacheFileSystem;
 import bp.cache.BPTreeCacheNode;
 import bp.config.UIConfigs;
 import bp.project.BPResourceProjectNotes;
+import bp.res.BPResource;
+import bp.res.BPResourceFileLocal;
 import bp.ui.scomp.BPLabel;
 import bp.ui.scomp.BPTextField;
 import bp.ui.util.UIUtil;
@@ -100,7 +104,7 @@ public class BPProjectOverviewPanelNotes extends JPanel implements BPProjectOver
 				List<BPTreeCacheNode<BPCacheDataFileSystem>> fs = cache.searchFileByName(".md", ".md", -1, k -> prjkey.equals(k));
 				for (BPTreeCacheNode<BPCacheDataFileSystem> f : fs)
 				{
-					m_pannote.add(makeLinkLine(f.getKey(), f.getKey()));
+					m_pannote.add(makeLinkLine(f.getKey(), f.getValue().getFullName()));
 				}
 			}
 		}
@@ -118,7 +122,17 @@ public class BPProjectOverviewPanelNotes extends JPanel implements BPProjectOver
 		rc.setMaximumSize(new Dimension(4000, UIConfigs.TEXTFIELD_HEIGHT()));
 		rc.setBackground(UIConfigs.COLOR_TEXTBG());
 		lbl.setBorder(new CompoundBorder(new EmptyBorder(0, 8, 0, 8), new MatteBorder(0, 0, 1, 0, UIConfigs.COLOR_WEAKBORDER())));
+		lbl.setName(fname);
+		lbl.addMouseListener(new UIUtil.BPMouseListener(null, this::onClickLink, null, null, null));
 		return rc;
+	}
+
+	protected void onClickLink(MouseEvent e)
+	{
+		BPLabel src = (BPLabel) e.getSource();
+		String fname = src.getName();
+		BPResource res = m_prjref.get().wrapResource(new BPResourceFileLocal(fname));
+		BPGUICore.runOnCurrentFrame(mf -> mf.openResource(res, null, null, false, null));
 	}
 
 	protected JPanel makeHLine(String label)
