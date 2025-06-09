@@ -1,4 +1,5 @@
 bp.ui.editor.BPMarkDownPanel$BPEditorFactoryMarkDown2ExtBrowser
 bp.ui.editor.BPMarkDownPanel$BPEditorFactoryMarkDown
 bp.ui.editor.BPTodoListPanel$BPEditorFactoryTodoList
+bp.ui.editor.BPTodoListPanel2$BPEditorFactoryTodoList2
 bp.ui.editor.BPEditorFactoryNotesJSON
