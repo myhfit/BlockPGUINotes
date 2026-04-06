@@ -9,6 +9,7 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
@@ -39,7 +40,6 @@ import bp.ui.util.CommonUIOperations;
 import bp.ui.util.UIUtil;
 import bp.util.IOUtil;
 import bp.util.MarkdownUtil;
-import bp.util.ObjUtil;
 import bp.util.Std;
 import bp.util.TextUtil;
 
@@ -100,14 +100,21 @@ public class BPMarkDownPanel extends BPTextPanel
 		m_txt.setChangedHandler(m_changedhandler);
 	}
 
-	protected void initActions()
+	protected List<Action> makeActionsAtPos(int pos)
 	{
-		super.initActions();
-		List<Action> rc = ObjUtil.makeList((Object[]) m_acts);
-		BPAction actbold = BPAction.build("Bold").acceleratorKey(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK)).callback(this::setTextBold).getAction();
-
-		rc.add(rc.size() - 1, actbold);
-		m_acts = rc.toArray(new Action[rc.size()]);
+		if (pos == 1)
+		{
+			List<Action> rc = super.makeActionsAtPos(0);
+			if (rc == null)
+				rc = new ArrayList<Action>();
+			BPAction actbold = BPAction.build("Bold").acceleratorKey(KeyStroke.getKeyStroke(KeyEvent.VK_B, InputEvent.CTRL_DOWN_MASK)).callback(this::setTextBold).getAction();
+			rc.add(actbold);
+			return rc;
+		}
+		else
+		{
+			return super.makeActionsAtPos(pos);
+		}
 	}
 
 	protected void onTextChanged(BPEditorPane comp)
