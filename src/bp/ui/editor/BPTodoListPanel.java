@@ -12,6 +12,7 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -35,6 +36,7 @@ import bp.ui.BPViewer;
 import bp.ui.actions.BPAction;
 import bp.ui.container.BPToolBarSQ;
 import bp.ui.dialog.BPDialogSimple;
+import bp.ui.editor.controller.BPEditorController;
 import bp.ui.form.BPForm;
 import bp.ui.form.BPFormManager;
 import bp.ui.res.icon.BPIconResV;
@@ -62,11 +64,13 @@ public class BPTodoListPanel extends JPanel implements BPEditor<JPanel>, BPViewe
 	protected BPTable<BPTodoItem> m_table;
 	protected BPTodoList m_todolist;
 	protected Consumer<BPTodoItem> m_editfunc;
+	protected BPEditorController m_ec;
 
 	protected BiConsumer<String, Boolean> m_state_changed;
 
 	public BPTodoListPanel()
 	{
+		m_ec = new BPEditorController(this);
 		init();
 		initBPActions();
 	}
@@ -217,7 +221,7 @@ public class BPTodoListPanel extends JPanel implements BPEditor<JPanel>, BPViewe
 		JScrollPane scroll = new JScrollPane((Component) form);
 		scroll.setPreferredSize(new Dimension(400, 300));
 		scroll.setBorder(new EmptyBorder(0, 0, 0, 0));
-		int r = BPDialogSimple.showComponent(scroll, BPDialogSimple.COMMANDBAR_OK_CANCEL, null, "Edit Todo", this.getFocusCycleRootAncestor());
+		int r = BPDialogSimple.showComponent(scroll, BPDialogSimple.COMMANDBAR_OK_CANCEL, null, "Edit Todo", SwingUtilities.getWindowAncestor(this));
 		if (r == BPDialogSimple.COMMAND_OK)
 		{
 			item.setMappedData(form.getFormData());
@@ -351,5 +355,10 @@ public class BPTodoListPanel extends JPanel implements BPEditor<JPanel>, BPViewe
 	protected void onEdit(ActionEvent e)
 	{
 		onEditItem(m_table.getSelectedData());
+	}
+
+	public BPEditorController getEditorController()
+	{
+		return m_ec;
 	}
 }
