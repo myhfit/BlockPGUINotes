@@ -32,6 +32,8 @@ import bp.res.BPResourceFile;
 import bp.res.BPResourceFileLocal;
 import bp.res.BPResourceFileSystem;
 import bp.ui.actions.BPAction;
+import bp.ui.actions.BPActionConstCommon;
+import bp.ui.actions.BPActionHelpers;
 import bp.ui.scomp.BPEditorPane;
 import bp.ui.scomp.BPMarkDownCodePane;
 import bp.ui.scomp.BPMarkDownView;
@@ -152,9 +154,15 @@ public class BPMarkDownPanel extends BPTextPanel
 		return new BPMarkDownCodePane();
 	}
 
-	public void toggleRightPanel()
+	public Action[] getSeparatorActions()
 	{
-		boolean canpreview = !m_canpreview;
+		Action acttr = BPActionHelpers.getAction(BPActionConstCommon.MF_MNUVIEWTOGGLERIGHTPAN, e -> toggleRightPanel());
+		return new Action[] { acttr };
+	}
+
+	public void toggleRightPanel(Boolean v)
+	{
+		boolean canpreview = (v != null ? v : (!m_canpreview));
 		m_canpreview = canpreview;
 		if (canpreview)
 		{

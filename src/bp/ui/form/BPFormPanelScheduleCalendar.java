@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import bp.locale.BPLocaleConstCC;
 import bp.ui.scomp.BPCheckBox;
 import bp.ui.scomp.BPComboBox;
 import bp.ui.scomp.BPTextField;
@@ -51,11 +52,11 @@ public class BPFormPanelScheduleCalendar extends BPFormPanelSchedule
 		
 		initUnits();
 
-		addSeparator("Condition");
-		addLine(new String[] { "Start Time" }, new Component[] { m_txttime }, () -> !m_txttime.isEmpty() && (DateUtil.parseTime(m_txttime.getNotEmptyText()) != -1));
-		addLine(new String[] { "Interval" }, new Component[] { m_txtinterval }, () -> m_txtinterval.isInt());
-		addLine(new String[] { "Unit" }, new Component[] { m_cmbunit }, () -> m_cmbunit.getSelectedIndex() > -1);
-		addLine(new String[] { "Run Once" }, new Component[] { m_chkrunonce });
+		addSeparator(m_lh.translate("Condition"));
+		addLine(new String[] { m_lh.translate("Start Time") }, new Component[] { m_txttime }, () -> !m_txttime.isEmpty() && (DateUtil.parseTime(m_txttime.getNotEmptyText()) != -1));
+		addLine(new String[] { m_lh.translate("Interval") }, new Component[] { m_txtinterval }, () -> m_txtinterval.isInt());
+		addLine(new String[] { BPLocaleConstCC.UNIT.text() }, new Component[] { m_cmbunit }, () -> m_cmbunit.getSelectedIndex() > -1);
+		addLine(new String[] { m_lh.translate("Run Once") }, new Component[] { m_chkrunonce });
 	}
 
 	protected void initUnits()
